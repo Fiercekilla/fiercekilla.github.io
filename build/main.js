@@ -24,44 +24,50 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var ApiService = (function () {
     function ApiService(http) {
         this.http = http;
-        this.apiKey = 'RGAPI-4e243a1d-f3ab-49f9-8d78-1c434363f3c1';
+        this.apiKey = 'RGAPI-0759c2ef-8796-4dcf-b939-9518ec0355a6';
     }
     ApiService.prototype.getUserId = function (nickname) {
         var _this = this;
         // let headers = new Headers({'X-Riot-Token' : this.apiKey});
         // let options = new RequestOptions({headers});
-        return this.http.get("/api/summoner/v3/summoners/by-name/" + nickname + "?api_key=" + this.apiKey)
+        return this.http.get("https://ru.api.riotgames.com/lol/summoner/v3/summoners/by-name/" + nickname + "?api_key=" + this.apiKey)
             .map(function (res) {
-            _this.summonerId = res.json().id;
+            _this.summonerId = res.json().accountId;
             return res.json();
         });
     };
     ApiService.prototype.getMatchList = function () {
-        return this.http.get("https://ru.api.riotgames.com/api/lol/RU/v1.3/game/by-summoner/" + this.summonerId + "/recent?api_key=" + this.apiKey)
+        return this.http.get("https://ru.api.riotgames.com/lol/match/v3/matchlists/by-account/" + this.summonerId + "/recent?api_key=" + this.apiKey)
             .map(function (res) {
             return res.json();
         });
     };
     ApiService.prototype.getChampById = function (id) {
-        return this.http.get("/api/static-data/v3/champions/" + id + "?locale=ru_RU&tags=image&api_key=" + this.apiKey)
+        return this.http.get("https://ru.api.riotgames.com/lol/static-data/v3/champions/" + id + "?locale=ru_RU&tags=image&api_key=" + this.apiKey)
             .map(function (res) {
             return res.json();
         });
     };
     ApiService.prototype.getItemInfo = function (id) {
-        return this.http.get("api/static-data/v3/items/" + id + "?locale=ru_RU&api_key=" + this.apiKey)
+        return this.http.get("https://ru.api.riotgames.com/lol/static-data/v3/items/" + id + "?locale=ru_RU&api_key=" + this.apiKey)
             .map(function (res) {
             return res.json();
         });
     };
     ApiService.prototype.getMatchInfo = function (id) {
-        return this.http.get("api/match/v3/matches/" + id + "?api_key=" + this.apiKey)
+        return this.http.get("https://ru.api.riotgames.com/lol/match/v3/matches/" + id + "?api_key=" + this.apiKey)
             .map(function (res) {
             return res.json();
         });
     };
     ApiService.prototype.getFullMatchInfo = function (id) {
-        return this.http.get("api/match/v3/matches/" + id + "?api_key=" + this.apiKey)
+        return this.http.get("https://ru.api.riotgames.com/lol/match/v3/matches/" + id + "?api_key=" + this.apiKey)
+            .map(function (res) {
+            return res.json();
+        });
+    };
+    ApiService.prototype.getMatchTimeline = function (id) {
+        return this.http.get("https://ru.api.riotgames.com/lol/match/v3/timelines/by-match/" + id + "?api_key=" + this.apiKey)
             .map(function (res) {
             return res.json();
         });
@@ -144,43 +150,43 @@ var HomePage = (function () {
             console.log(res);
             _this.api.getMatchList().subscribe(function (res) {
                 console.log(res);
-                _this.matches = res.games;
+                _this.matches = res.matches;
                 var self = _this;
                 _this.matches.forEach(function (item) {
-                    item.itemImages = [
-                        {
-                            link: "http://ddragon.leagueoflegends.com/cdn/6.24.1/img/item/" + item.stats.item0 + ".png " || '',
-                            key: item.stats.item0 || null
-                        },
-                        {
-                            link: "http://ddragon.leagueoflegends.com/cdn/6.24.1/img/item/" + item.stats.item1 + ".png " || '',
-                            key: item.stats.item1 || null
-                        },
-                        {
-                            link: "http://ddragon.leagueoflegends.com/cdn/6.24.1/img/item/" + item.stats.item2 + ".png " || '',
-                            key: item.stats.item2 || null
-                        },
-                        {
-                            link: "http://ddragon.leagueoflegends.com/cdn/6.24.1/img/item/" + item.stats.item3 + ".png " || '',
-                            key: item.stats.item3 || null
-                        },
-                        {
-                            link: "http://ddragon.leagueoflegends.com/cdn/6.24.1/img/item/" + item.stats.item4 + ".png " || '',
-                            key: item.stats.item4 || null
-                        },
-                        {
-                            link: "http://ddragon.leagueoflegends.com/cdn/6.24.1/img/item/" + item.stats.item5 + ".png " || '',
-                            key: item.stats.item5 || null
-                        },
-                        {
-                            link: "http://ddragon.leagueoflegends.com/cdn/6.24.1/img/item/" + item.stats.item6 + ".png " || '',
-                            key: item.stats.item6 || null
-                        },
-                    ];
-                    self.api.getChampById(item.championId).subscribe(function (res) {
+                    // item.itemImages = [
+                    //   {
+                    //     link: `http://ddragon.leagueoflegends.com/cdn/6.24.1/img/item/${item.stats.item0}.png ` || '',
+                    //     key: item.stats.item0 || null
+                    //   },
+                    //   {
+                    //     link: `http://ddragon.leagueoflegends.com/cdn/6.24.1/img/item/${item.stats.item1}.png ` || '',
+                    //     key: item.stats.item1 || null
+                    //   },
+                    //   {
+                    //     link: `http://ddragon.leagueoflegends.com/cdn/6.24.1/img/item/${item.stats.item2}.png ` || '',
+                    //     key: item.stats.item2 || null
+                    //   },
+                    //   {
+                    //     link: `http://ddragon.leagueoflegends.com/cdn/6.24.1/img/item/${item.stats.item3}.png ` || '',
+                    //     key: item.stats.item3 || null
+                    //   },
+                    //   {
+                    //     link: `http://ddragon.leagueoflegends.com/cdn/6.24.1/img/item/${item.stats.item4}.png ` || '',
+                    //     key: item.stats.item4 || null
+                    //   },
+                    //   {
+                    //     link: `http://ddragon.leagueoflegends.com/cdn/6.24.1/img/item/${item.stats.item5}.png ` || '',
+                    //     key: item.stats.item5 || null
+                    //   },
+                    //   {
+                    //     link: `http://ddragon.leagueoflegends.com/cdn/6.24.1/img/item/${item.stats.item6}.png ` || '',
+                    //     key: item.stats.item6 || null
+                    //   },
+                    // ];
+                    self.api.getChampById(item.champion).subscribe(function (res) {
                         item.champName = res.name;
                         item.champTitle = res.title;
-                        item.champImg = "http://ddragon.leagueoflegends.com/cdn/6.24.1/img/champion/" + res.key + ".png";
+                        item.champImg = "assets/champion/" + res.key + ".png";
                         item.champKey = res.key;
                     });
                 });
@@ -239,6 +245,7 @@ var MatchDetails = (function () {
         this.viewController = viewController;
         this.api = api;
         this.loadingCtrl = loadingCtrl;
+        this.matchEvents = [];
         var loading = this.loadingCtrl.create({
             content: 'Загрузка данных...'
         });
@@ -246,30 +253,79 @@ var MatchDetails = (function () {
         this.teamId = 100;
         this.matchData = navParams.get('details');
         this.bgChampImg = "http://ddragon.leagueoflegends.com/cdn/img/champion/loading/" + this.matchData.champKey + "_0.jpg";
-        this.matchData.timePlayedString = Math.ceil(this.matchData.stats.timePlayed / 60) + " \u043C\u0438\u043D. " + this.matchData.stats.timePlayed % 60 + " \u0441\u0435\u043A.";
         this.api.getMatchInfo(this.matchData.gameId).subscribe(function (res) {
+            _this.matchData.timePlayedString = Math.ceil(res.gameDuration / 60) + " \u043C\u0438\u043D. " + res.gameDuration % 60 + " \u0441\u0435\u043A.";
             var self = _this;
+            res.participants.forEach(function (item) {
+                if (item.championId === self.matchData.champion) {
+                    self.matchData.stats = item.stats;
+                    self.matchData.participantId = item.participantId;
+                }
+            });
+            console.log(_this.matchData);
             _this.fullMatchInfo = res;
             _this.fullMatchInfo.participantIdentities.forEach(function (item, index) {
-                self.fullMatchInfo.participants[index].summonerName = item.player.summonerName;
+                self.fullMatchInfo.participants[index].summonerName = item.player ? item.player.summonerName : null;
             });
             _this.fullMatchInfo.participants.forEach(function (item, index) {
                 self.api.getChampById(item.championId).subscribe(function (res) {
                     item.champKey = res.key;
                 });
             });
+            _this.api.getMatchTimeline(_this.matchData.gameId).subscribe(function (res) {
+                console.log(res);
+                res.frames.forEach(function (item) {
+                    if (item.events.length > 0) {
+                        item.events.forEach(function (event) {
+                            if (event.participantId === self.matchData.participantId || event.killerId === self.matchData.participantId || event.victimId === self.matchData.participantId) {
+                                var action = {
+                                    type: event.type,
+                                    item: event.itemId || null,
+                                    victim: event.victimId || null,
+                                    killer: event.killerId || null,
+                                    timestampString: Math.ceil((event.timestamp / 1000) / 60) + " \u043C\u0438\u043D. " + ((event.timestamp / 1000) % 60).toFixed(0) + " \u0441\u0435\u043A.",
+                                };
+                                self.matchEvents.push(action);
+                                self.getChampInfoByParticipantId();
+                            }
+                        });
+                    }
+                });
+                console.log(_this.matchEvents);
+            });
             loading.dismiss();
-            console.log(_this.fullMatchInfo.participants);
         });
     }
     MatchDetails.prototype.closeDetails = function () {
         this.viewController.dismiss();
     };
+    MatchDetails.prototype.getChampInfoByParticipantId = function () {
+        var self = this;
+        var imgs = [];
+        this.matchEvents.forEach(function (event) {
+            if (event.type === 'CHAMPION_KILL') {
+                self.fullMatchInfo.participants.forEach(function (item) {
+                    if (item.participantId === event.killer && item.participantId !== self.matchData.participantId) {
+                        event.actionInfo = {
+                            key: item.champKey,
+                            type: 'Смерть'
+                        };
+                    }
+                    else if (item.participantId === event.victim && item.participantId !== self.matchData.participantId) {
+                        event.actionInfo = {
+                            key: item.champKey,
+                            type: 'Убийство'
+                        };
+                    }
+                });
+            }
+        });
+    };
     return MatchDetails;
 }());
 MatchDetails = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'match.details',template:/*ion-inline-start:"E:\proj\ionic\leagueApp\src\pages\match\match.details.html"*/'<ion-content>\n  <div class="background-champ">\n    <img [src]="bgChampImg">\n  </div>\n  <ion-item class="title">\n    <ion-avatar item-start>\n      <img [src]="matchData.champImg">\n    </ion-avatar>\n    <h2>{{ matchData.champName }}</h2>\n    <p>{{ matchData.champTitle }}</p>\n    <p class="game-result" [class.win]="matchData.stats.win" [class.lose]="!matchData.stats.win">{{ matchData.stats.win ? \'Победа\' : \'Поражение\' }}</p>\n    <ion-icon item-end class="icon icon-md ion-md-arrow-forward" (click)="closeDetails()"></ion-icon>\n  </ion-item>\n\n  <ion-item class="stats">\n    <ion-item item-left>\n      <div class="block">\n        <img src="http://ddragon.leagueoflegends.com/cdn/5.5.1/img/ui/score.png" alt="">\n        <p>{{ matchData.stats.championsKilled }} / {{ matchData.stats.numDeaths }} / {{ matchData.stats.assists }}\n          ( {{((matchData.stats.championsKilled + matchData.stats.assists) / matchData.stats.numDeaths ).toFixed(2)}})</p>\n      </div>\n     <div class="block">\n       <img src="http://ddragon.leagueoflegends.com/cdn/5.5.1/img/ui/minion.png" alt="">\n       <p>{{ matchData.stats.minionsKilled }}</p>\n     </div>\n      <div class="block">\n        <img src="http://www.rospt.ru/img/ico/clock_16.png" alt="">\n        <p>{{ matchData.timePlayedString }}</p>\n      </div>\n    </ion-item>\n  </ion-item>\n\n  <ion-item class="players">\n    <ion-segment [(ngModel)]="teamId" color="light">\n      <ion-segment-button [value]="100">\n        <p class="lightblue">Blue team</p>\n      </ion-segment-button>\n      <ion-segment-button [value]="200">\n        <p class="lightred">Red team</p>\n      </ion-segment-button>\n    </ion-segment>\n\n    <ion-list *ngIf="fullMatchInfo && fullMatchInfo.participants">\n      <ion-item-sliding #item1 *ngFor="let item of fullMatchInfo.participants" [class.hidden]="item.teamId !== teamId">\n        <ion-item>\n          <ion-avatar item-start>\n            <img [src]="\'http://ddragon.leagueoflegends.com/cdn/6.24.1/img/champion/\' + item.champKey + \'.png\'" alt="">\n          </ion-avatar>\n          <div class="item-inner player-stats">\n            <p>{{ item.summonerName }}</p>\n            <p>{{ item.stats.kills }} / {{ item.stats.deaths }} / {{ item.stats.assists }}\n              ( {{((item.stats.kills + item.stats.assists) / item.stats.deaths ).toFixed(2)}})</p>\n          </div>\n        </ion-item>\n        <ion-item-options side="right">\n          <button ion-button (click)="favorite(item)">Favorite</button>\n          <button ion-button color="danger" (click)="share(item)">Share</button>\n        </ion-item-options>\n      </ion-item-sliding>\n    </ion-list>\n  </ion-item>\n\n</ion-content>\n'/*ion-inline-end:"E:\proj\ionic\leagueApp\src\pages\match\match.details.html"*/
+        selector: 'match.details',template:/*ion-inline-start:"E:\proj\ionic\leagueApp\src\pages\match\match.details.html"*/'<ion-content>\n  <div class="background-champ">\n    <img [src]="bgChampImg">\n  </div>\n  <ion-item class="title">\n    <ion-avatar item-start>\n      <img [src]="matchData.champImg">\n    </ion-avatar>\n    <h2>{{ matchData.champName }}</h2>\n    <p>{{ matchData.champTitle }}</p>\n    <!--<p class="game-result" [class.win]="matchData.stats.win" [class.lose]="!matchData.stats.win">{{ matchData.stats.win ? \'Победа\' : \'Поражение\' }}</p>-->\n    <ion-icon item-end class="icon icon-md ion-md-arrow-forward" (click)="closeDetails()"></ion-icon>\n  </ion-item>\n\n  <ion-item class="stats" *ngIf="matchData.stats">\n    <ion-item item-left>\n      <div class="block">\n        <img src="http://ddragon.leagueoflegends.com/cdn/5.5.1/img/ui/score.png" alt="">\n        <p>{{ matchData.stats.kills }} / {{ matchData.stats.deaths }} / {{ matchData.stats.assists }}\n          ( {{((matchData.stats.kills + matchData.stats.assists) / matchData.stats.deaths ).toFixed(2)}})</p>\n      </div>\n     <div class="block">\n       <img src="http://ddragon.leagueoflegends.com/cdn/5.5.1/img/ui/minion.png" alt="">\n       <p>{{ matchData.stats.minionsKilled }}</p>\n     </div>\n      <div class="block">\n        <img src="http://www.rospt.ru/img/ico/clock_16.png" alt="">\n        <p>{{ matchData.timePlayedString }}</p>\n      </div>\n    </ion-item>\n  </ion-item>\n\n  <ion-item class="players">\n    <ion-segment [(ngModel)]="teamId" color="light">\n      <ion-segment-button [value]="100">\n        <p class="lightblue">Blue team</p>\n      </ion-segment-button>\n      <ion-segment-button [value]="200">\n        <p class="lightred">Red team</p>\n      </ion-segment-button>\n    </ion-segment>\n\n    <ion-list *ngIf="fullMatchInfo && fullMatchInfo.participants">\n      <ion-item-sliding #item1 *ngFor="let item of fullMatchInfo.participants" [class.hidden]="item.teamId !== teamId">\n        <ion-item>\n          <ion-avatar item-start>\n            <img [src]="\'assets/champion/\' + item.champKey + \'.png\'" alt="">\n          </ion-avatar>\n          <div class="item-inner player-stats">\n            <p *ngIf="item.summonerName">{{ item.summonerName }}</p>\n            <p>{{ item.stats.kills }} / {{ item.stats.deaths }} / {{ item.stats.assists }}\n              ( {{((item.stats.kills + item.stats.assists) / item.stats.deaths ).toFixed(2)}})</p>\n          </div>\n        </ion-item>\n        <ion-item-options side="right">\n          <button ion-button (click)="favorite(item)">Favorite</button>\n          <button ion-button color="danger" (click)="share(item)">Share</button>\n        </ion-item-options>\n      </ion-item-sliding>\n    </ion-list>\n  </ion-item>\n\n  <ion-item *ngFor="let event of matchEvents" [class.hidden]="event.type !== \'CHAMPION_KILL\'" class="action-item">\n    <ion-avatar item-start>\n      <img [src]="matchData.champImg">\n    </ion-avatar>\n    <p class="type" *ngIf="event">{{ event.timestampString }}</p>\n    <p class="type" *ngIf="event.actionInfo">{{ event.actionInfo.type }}</p>\n    <ion-avatar item-end *ngIf="event.actionInfo">\n      <img [src]="\'assets/champion/\' + event.actionInfo.key + \'.png\'" alt="">\n    </ion-avatar>\n\n    <div *ngIf="event.type === \'CHAMPION_KILL\'">\n\n    </div>\n\n    <ion-card-content>\n\n    </ion-card-content>\n\n  </ion-item>\n\n</ion-content>\n'/*ion-inline-end:"E:\proj\ionic\leagueApp\src\pages\match\match.details.html"*/
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavParams */],
         __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* ViewController */],
