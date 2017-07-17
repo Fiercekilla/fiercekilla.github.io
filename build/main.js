@@ -30,44 +30,44 @@ var ApiService = (function () {
         var _this = this;
         // let headers = new Headers({'X-Riot-Token' : this.apiKey});
         // let options = new RequestOptions({headers});
-        return this.http.get("api/summoner/v3/summoners/by-name/" + nickname + "?api_key=" + this.apiKey)
+        return this.http.get("https://ru.api.riotgames.com/lol/summoner/v3/summoners/by-name/" + nickname + "?api_key=" + this.apiKey)
             .map(function (res) {
             _this.summonerId = res.json().accountId;
             return res.json();
         });
     };
     ApiService.prototype.getMatchList = function () {
-        return this.http.get("api/match/v3/matchlists/by-account/" + this.summonerId + "/recent?api_key=" + this.apiKey)
+        return this.http.get("https://ru.api.riotgames.com/lol/match/v3/matchlists/by-account/" + this.summonerId + "/recent?api_key=" + this.apiKey)
             .map(function (res) {
             return res.json();
         });
     };
     ApiService.prototype.getChampById = function (id) {
-        return this.http.get("/api/static-data/v3/champions/" + id + "?locale=ru_RU&tags=image&api_key=" + this.apiKey)
+        return this.http.get("https://ru.api.riotgames.com/lol/static-data/v3/champions/" + id + "?locale=ru_RU&tags=image&api_key=" + this.apiKey)
             .map(function (res) {
             return res.json();
         });
     };
     ApiService.prototype.getItemInfo = function (id) {
-        return this.http.get("api/static-data/v3/items/" + id + "?locale=ru_RU&api_key=" + this.apiKey)
+        return this.http.get("https://ru.api.riotgames.com/lol/static-data/v3/items/" + id + "?locale=ru_RU&api_key=" + this.apiKey)
             .map(function (res) {
             return res.json();
         });
     };
     ApiService.prototype.getMatchInfo = function (id) {
-        return this.http.get("api/match/v3/matches/" + id + "?api_key=" + this.apiKey)
+        return this.http.get("https://ru.api.riotgames.com/lol/match/v3/matches/" + id + "?api_key=" + this.apiKey)
             .map(function (res) {
             return res.json();
         });
     };
     ApiService.prototype.getFullMatchInfo = function (id) {
-        return this.http.get("api/match/v3/matches/" + id + "?api_key=" + this.apiKey)
+        return this.http.get("https://ru.api.riotgames.com/lol/match/v3/matches/" + id + "?api_key=" + this.apiKey)
             .map(function (res) {
             return res.json();
         });
     };
     ApiService.prototype.getMatchTimeline = function (id) {
-        return this.http.get("api/match/v3/timelines/by-match/" + id + "?api_key=" + this.apiKey)
+        return this.http.get("https://ru.api.riotgames.com/lol/match/v3/timelines/by-match/" + id + "?api_key=" + this.apiKey)
             .map(function (res) {
             return res.json();
         });
